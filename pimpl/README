@@ -1,0 +1,4 @@
+pimpl examples.
+
+Compile:
+	make CXXFLAGS="-I$HOME/src/boost/boost"

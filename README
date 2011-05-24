@@ -1,3 +1,25 @@
 Various Boost Examples that I've accumulated.
 
-Some of Boost's (excellent!) documentation can be a bit dense at times and a simple example is often all that's needed to get rolling. Provide a public repository of my random Boost meanderings.
+Some of Boost's (excellent!) documentation can be a bit dense at times and a
+simple example is often all that's needed to get rolling. Here is my public
+repo that documents some of my random Boost meanderings.
+
+I make use of a .cshrc file that sources a .enter.tcsh if it has the correct
+ownership and permissions. This is very handy for setting environment
+variables such as BOOST_INCDIR, which is referenced throughout various
+Makefiles.
+
+To review, download or learn more about my .cshrc file, see:
+
+	https://github.com/sean-/flask-skeleton/blob/master/.cshrc for details or
+
+Or download it directly:
+
+	curl -o ~/.cshrc https://github.com/sean-/flask-skeleton/raw/master/.cshrc
+	exec /bin/tcsh # Once ~/.cshrc has been reviewed to your satisfaction!!
+	chsh /bin/tcsh # When ready to ditch bash
+
+All content in this repository is licensed under the Boost Software License,
+Version 1.0. See LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt .
+
+Cheers. -Sean

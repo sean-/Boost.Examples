@@ -1,3 +1,7 @@
+// Copyright Sean Chittenden 2011. Distributed under the Boost Software
+// License, Version 1.0. (See accompanying file ../LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #include "pimpl_example_pointer.h"
 
 // This internal implementation usually only have destructor, constructors,
@@ -10,7 +14,7 @@
 // Changes to the contents of this file do not result in consumers to
 // recompile (however they will need to relink because the .o file has
 // changed).
-template<> struct pimpl< my::String >::implementation : boost::noncopyable {
+template<> struct pimpl< org::example::String >::implementation : boost::noncopyable {
   implementation() : str_(0) { }
   implementation(char const* c_str, std::size_t len) : str_(0) {
     str_ = new std::string(c_str, len);
@@ -26,9 +30,11 @@ template<> struct pimpl< my::String >::implementation : boost::noncopyable {
 };
 
 
-// Begin 'my' namespace here and not above (not sure what the source of the
+// Begin the namespace here and not above (not sure what the source of the
 // breakage is, but it breaks).
-namespace my {
+namespace org {
+namespace example {
+
 
 // Call the implementation ctor/dtors. Forgetting to do this results in
 // linker errors.
@@ -44,4 +50,5 @@ bool String::append(unsigned char byte) {
 
 const std::string* String::cur_str() const { return (*this)->str_; }
 
-} // namespace my
+} // namespace example
+} // namespace org

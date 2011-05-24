@@ -1,14 +1,18 @@
+// Copyright Sean Chittenden 2011. Distributed under the Boost Software
+// License, Version 1.0. (See accompanying file ../LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef PIMPL_EXAMPLE_POINTER_H
 #define PIMPL_EXAMPLE_POINTER_H
 
 #include "boost/pimpl/pimpl.hpp"
 
-// My interface
-namespace my {
+namespace org {
+namespace example {
 
 class String : public pimpl< String >::pointer_semantics {
  public:
-  // A pure my::String interface.
+  // A pure org::String interface.
 
   // The implementation is hidden in pimpl_example_pointer.cpp. Consumers of
   // this interface need only include this header file.
@@ -26,6 +30,7 @@ class String : public pimpl< String >::pointer_semantics {
   const std::string* cur_str() const;
 };
 
-} // namespace my
+} // namespace example
+} // namespace org
 
 #endif // PIMPL_EXAMPLE_POINTER_H

@@ -1,0 +1,22 @@
+Compile:
+	"Client" mode:
+		make && ./timer 5 1
+
+	"Server" mode signal handling:
+		env CPPFLAGS=-DSERVER_MODE=1 make && ./timer 5 1
+
+Notes:
+
+	This is a terribly contrived example where the deadline timer almost
+	always cancels the heartbeat timer.  The signal handling code is
+	there so that people get used to the idea of masking signals in
+	multi-threaded applications. This example doesn't, unfortunately,
+	provide a good example of how to wind down a client-mode program once
+	either the client work queue is empty or a signal is received. It's
+	easy to do one or the other, not both.
+
+	In the future I may make the main thread poll on a variable or have a
+	thread send an alarm signal, but... not now. :~]
+
+http://www.boost.org/doc/libs/1_46_1/doc/html/boost_asio/tutorial/tuttimer3.html
+http://www.boost.org/doc/libs/1_39_0/doc/html/boost_asio/tutorial/tuttimer5.html

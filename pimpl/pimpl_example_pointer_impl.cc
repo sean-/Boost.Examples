@@ -27,6 +27,11 @@ template<> struct pimpl< org::example::String >::implementation : boost::noncopy
   // Consumers of my Interface are not aware of this or any other member
   // variable.
   std::string* str_;
+
+  // Suck up some bytes to demo stable front-end ABI
+  int a_;
+  int b_;
+  char padding[256];
 };
 
 
@@ -48,7 +53,11 @@ bool String::append(unsigned char byte) {
 }
 
 
-const std::string* String::cur_str() const { return (*this)->str_; }
+const std::string& String::str_ref() const { return *((*this)->str_); }
+
+std::string& String::str_ref_mutable() const { return *((*this)->str_); }
+
+const std::string* String::str_ptr() const { return (*this)->str_; }
 
 } // namespace example
 } // namespace org

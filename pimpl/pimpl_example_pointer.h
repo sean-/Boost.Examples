@@ -20,14 +20,23 @@ class String : public pimpl< String >::pointer_semantics {
   /// ctor
   String();
 
-  /// ctor with initial value
+  /// ctor with initial pointer
   String(char const* c_str, std::size_t len);
 
   /// Add a byte
   bool append(unsigned char byte);
 
-  /// Gets the current value
-  const std::string* cur_str() const;
+  /// Gets the current string as a reference
+  const std::string& str_ref() const;
+
+  /// Gets a mutable reference to the string
+  std::string& str_ref_mutable() const;
+
+  /// Gets the current string as a pointer
+  const std::string* str_ptr() const;
+ private:
+  // Possible to reserve additional bytes to maintain ABI stability
+  //char padding[32];
 };
 
 } // namespace example

@@ -1,5 +1,8 @@
 Boost.Pimpl examples.
 
+Documentation:
+	http://drdobbs.com/cpp/205918714
+
 Compile:
 	make
 
@@ -14,9 +17,15 @@ Notes:
 	% touch pimpl_example_pointer_impl.cc
 	% make # Note: Only pimpl_example_pointer_impl.o is regenerated
 
-Installation Notes: I moved my copy of Boost.Pimpl in to
+Installation Notes: I have included a version of Boost.Pimpl from the vault
+	since it appears to be down at the time of writing. The only
+	difference between the copy here and the "official" version in the
+	fault is I moved my copy of Boost.Pimpl in to
 	$BOOST_INCDIR/boost/pimpl/ and fixed up the various #include paths to
-	match.
+	match. For the purposes of demoing or using Pimpl, just copy
+	boost/pimpl to your boost include directory:
+
+	% cp -prv boost/pimpl $BOOST_INCDIR/boost/
 
 	GCC's LTO[1,2] is particularly appealing when possibly used in
 	conjunction with Pimpl. I haven't had great success with LTO yet[3],

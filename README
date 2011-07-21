@@ -11,11 +11,11 @@ Makefiles.
 
 To review, download or learn more about my .cshrc file, see:
 
-	https://github.com/sean-/flask-skeleton/blob/master/.cshrc for details or
+	https://raw.github.com/sean-/cshrc/master/.cshrc
 
-Or download it directly:
+for details or download it directly:
 
-	curl -o ~/.cshrc https://github.com/sean-/flask-skeleton/raw/master/.cshrc
+	curl -o ~/.cshrc # fetch -o ~/.cshrc https://raw.github.com/sean-/cshrc/master/.cshrc
 	exec /bin/tcsh # Once ~/.cshrc has been reviewed to your satisfaction!!
 	chsh /bin/tcsh # When ready to ditch bash
 

@@ -5,6 +5,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
 #include "boost/date_time/microsec_time_clock.hpp"
+#include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/format.hpp"
 
 #define BOOST_TEST_DYN_LINK
@@ -56,10 +57,27 @@ BOOST_AUTO_TEST_CASE( epoc_date ) {
   ptime time_t_epoc = boost::posix_time::from_time_t(0);
   ptime friday_time = boost::posix_time::from_time_t(1311376273);
 
-  time_duration td1 = t - time_t_epoc;
-  time_duration td2 = friday_time - time_t_epoc;
-  BOOST_CHECK_EQUAL(td2.total_seconds() / 86400, 15177);
+  time_duration td = friday_time - time_t_epoc;
+  BOOST_CHECK_EQUAL(td.total_seconds() / 86400, 15177);
   std::cout << format("days from epoc to time(1311376273): %1%")
-      % (td2.total_seconds() / 86400)
+      % (td.total_seconds() / 86400)
             << std::endl;
+}
+
+
+
+BOOST_AUTO_TEST_CASE( epoc_date_duration ) {
+  using namespace ::boost::posix_time;
+  using namespace ::boost::gregorian;
+  using ::boost::posix_time::ptime;
+  typedef ::boost::date_time::microsec_clock< ptime > msecc_t;
+
+  ptime t = msecc_t::universal_time();
+  date epoc_day(from_time_t(0).date());
+  date friday_day(boost::posix_time::from_time_t(1311376273).date());
+
+  date_duration day_diff = friday_day - epoc_day;
+  BOOST_CHECK_EQUAL(day_diff.days(), 15177);
+  std::cout << format("days from epoc to time(1311376273): %1%")
+      % day_diff.days() << std::endl;
 }

@@ -44,3 +44,22 @@ BOOST_AUTO_TEST_CASE( epoc ) {
   BOOST_CHECK_EQUAL(td1.total_seconds(), ::time(0));
   std::cout << format("epoc: %1%.%2%") % td1.total_seconds() % td1.fractional_seconds() << std::endl;
 }
+
+
+
+BOOST_AUTO_TEST_CASE( epoc_date ) {
+  using ::boost::posix_time::ptime;
+  using ::boost::posix_time::time_duration;
+  typedef ::boost::date_time::microsec_clock< ptime > msecc_t;
+
+  ptime t = msecc_t::universal_time();
+  ptime time_t_epoc = boost::posix_time::from_time_t(0);
+  ptime friday_time = boost::posix_time::from_time_t(1311376273);
+
+  time_duration td1 = t - time_t_epoc;
+  time_duration td2 = friday_time - time_t_epoc;
+  BOOST_CHECK_EQUAL(td2.total_seconds() / 86400, 15177);
+  std::cout << format("days from epoc to time(1311376273): %1%")
+      % (td2.total_seconds() / 86400)
+            << std::endl;
+}

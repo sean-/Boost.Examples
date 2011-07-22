@@ -56,10 +56,9 @@ BOOST_AUTO_TEST_CASE( epoc_date ) {
   ptime time_t_epoc = boost::posix_time::from_time_t(0);
   ptime friday_time = boost::posix_time::from_time_t(1311376273);
 
-  time_duration td1 = t - time_t_epoc;
-  time_duration td2 = friday_time - time_t_epoc;
-  BOOST_CHECK_EQUAL(td2.total_seconds() / 86400, 15177);
+  time_duration td = friday_time - time_t_epoc;
+  BOOST_CHECK_EQUAL(td.total_seconds() / 86400, 15177);
   std::cout << format("days from epoc to time(1311376273): %1%")
-      % (td2.total_seconds() / 86400)
+      % (td.total_seconds() / 86400)
             << std::endl;
 }

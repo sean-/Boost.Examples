@@ -9,10 +9,38 @@ namespace stackoverflow {
 class Example;
 class Example::Impl;
 
+
+#if !defined(_MSC_VER) || _MSC_VER > 1600
+// Congratulations!, you're using a compiler that isn't broken
+
 // Explicitly instantiate std::string variants
 template bool Example::foo_set<std::string>(std::string&& src);
 template bool Example::foo_set<std::string&>(std::string& src);
 template bool Example::foo_set<const std::string&>(const std::string& src);
+
+// The following isn't required because of the array Example::foo_set()
+// specialization, but I'm leaving it here for reference.
+//
+// template bool Example::foo_set<const char(&)[7]>(char const (&)[7]);
+#else
+// MSVC workaround: msvc_rage_hate() isn't ever called, but use it to
+// instantiate all of the required templates.
+namespace {
+  void msvc_rage_hate() {
+    Example e;
+    const std::string a_const_str("a");
+    std::string a_str("b");
+    e.foo_set(a_const_str);
+    e.foo_set(a_str);
+    e.foo_set("c");
+    e.foo_set(std::string("d"));
+  }
+} // anon namespace
+#endif // _MSC_VER
+
+
+
+// Example Private Implementation
 
 class Example::Impl final {
 public:
@@ -57,6 +85,7 @@ Example::Impl::Impl(const std::string& init_foo) : foo_{init_foo} {
   bar_[bar_capacity_] = '\0'; // null padding
 }
 
+
 template <typename LockType>
 bool
 Example::Impl::bar(LockType& lk, const std::size_t len, char* dst) const {
@@ -67,6 +96,7 @@ Example::Impl::bar(LockType& lk, const std::size_t len, char* dst) const {
 
   return true;
 }
+
 
 template <typename LockType>
 std::size_t
@@ -99,6 +129,7 @@ Example::Impl::foo(LockType& lk) const {
   return foo_;
 }
 
+
 template <typename T>
 bool
 Example::Impl::foo_set(unique_lock_t &lk, T&& src) {
@@ -108,6 +139,8 @@ Example::Impl::foo_set(unique_lock_t &lk, T&& src) {
   return true;
 }
 
+
+// Example Public Interface
 
 Example::Example() : impl_(new Impl{}) {}
 Example::Example(const std::string& init_foo) : impl_(new Impl{init_foo}) {}

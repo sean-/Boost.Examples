@@ -31,6 +31,37 @@ public:
   template<typename T>
   bool foo_set(T&& new_val);
 
+  // Begin foo_set() variants required to deal with C types (e.g. char[],
+  // char*). The rest of the foo_set() methods here are *NOT* required under
+  // normal circumstances.
+
+  // Setup a specialization for const char[] that simply forwards along a
+  // std::string. This is preferred over having to explicitly instantiate a
+  // bunch of const char[N] templates or possibly std::decay a char[] to a
+  // char* (i.e. using a std::string as a container is a Good Thing(tm)).
+  //
+  // Also, without this, it is required to explicitly instantiate the required
+  // variants of const char[N] someplace. For example, in example.cpp:
+  //
+  // template bool Example::foo_set<const char(&)[6]>(char const (&)[6]);
+  // template bool Example::foo_set<const char(&)[7]>(char const (&)[7]);
+  // template bool Example::foo_set<const char(&)[8]>(char const (&)[8]);
+  // ...
+  //
+  // Eww. Best to just forward to wrap new_val in a std::string and proxy
+  // along the call to foo_set<std::string>().
+  template<std::size_t N>
+  bool foo_set(const char (&new_val)[N]) { return foo_set(std::string(new_val, N)); }
+
+  // Inline function overloads to support null terminated char* && const
+  // char* arguments. If there's a way to reduce this duplication with
+  // templates, I'm all ears because I wasn't able to generate a templated
+  // versions that didn't conflict with foo_set<T&&>().
+  bool foo_set(char* new_val)       { return foo_set(std::string(new_val)); }
+  bool foo_set(const char* new_val) { return foo_set(std::string(new_val)); }
+
+  // End of the foo_set() overloads.
+
   // Example getter method for a POD data type
   bool bar(const std::size_t len, char* dst) const;
   std::size_t bar_capacity() const;

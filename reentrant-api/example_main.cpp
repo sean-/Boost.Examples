@@ -24,7 +24,11 @@ main(const int /*argc*/, const char** /*argv*/) {
 
   try {
     Example e;
-    e.foo_set("bbbbb");
+    const std::string a_const_str("bbbbbbb");
+    e.foo_set(a_const_str);
+    std::string a_str("cccccccc");
+    e.foo_set(a_str);
+    e.foo_set(std::string("ddddd"));
     cout << "Example's bar capacity: " << e.bar_capacity() << endl;
     const std::size_t len = e.bar_capacity();
 

@@ -26,8 +26,10 @@ public:
   // Example getter method that supports rvalues
   std::string foo() const;
 
-  // Example setter method
-  bool foo_set(const std::string& new_val);
+  // Example setter method using perfect forwarding & move semantics. Anything
+  // that's std::string-like will work as a parameter.
+  template<typename T>
+  bool foo_set(T&& new_val);
 
   // Example getter method for a POD data type
   bool bar(const std::size_t len, char* dst) const;

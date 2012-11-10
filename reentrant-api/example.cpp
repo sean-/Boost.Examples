@@ -2,11 +2,17 @@
 
 #include <algorithm>
 #include <cstring>
+#include <utility>
 
 namespace stackoverflow {
 
 class Example;
 class Example::Impl;
+
+// Explicitly instantiate std::string variants
+template bool Example::foo_set<std::string>(std::string&& src);
+template bool Example::foo_set<std::string&>(std::string& src);
+template bool Example::foo_set<const std::string&>(const std::string& src);
 
 class Example::Impl final {
 public:
@@ -31,7 +37,8 @@ public:
   template <typename LockType>
   std::string foo(LockType& lk) const;
 
-  bool foo_set(unique_lock_t& lk, const std::string& src);
+  template <typename T>
+  bool foo_set(unique_lock_t& lk, T&& src);
 
 private:
   // Example datatype that supports rvalue references
@@ -87,11 +94,12 @@ Example::Impl::foo(LockType& lk) const {
   return foo_;
 }
 
+template <typename T>
 bool
-Example::Impl::foo_set(unique_lock_t &lk, const std::string& src) {
+Example::Impl::foo_set(unique_lock_t &lk, T&& src) {
   BOOST_ASSERT(lk.owns_lock());
   if (foo_ == src) return false;
-  foo_ = src;
+  foo_ = std::move(src);
   return true;
 }
 
@@ -124,10 +132,11 @@ Example::foo() const {
   return impl_->foo(lk);
 }
 
+template<typename T>
 bool
-Example::foo_set(const std::string& src) {
+Example::foo_set(T&& src) {
   unique_lock_t lk(rw_mtx_);
-  return impl_->foo_set(lk, src);
+  return impl_->foo_set(lk, std::forward<T>(src));
 }
 
 } // namespace stackoverflow

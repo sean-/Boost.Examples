@@ -75,17 +75,22 @@ Example::Impl::bar_capacity(LockType& lk) const {
   return Impl::bar_capacity_;
 }
 
+
 bool
 Example::Impl::bar_set(unique_lock_t &lk, const std::size_t len, const char* src) {
   BOOST_ASSERT(lk.owns_lock());
-  // Return false if the size is not the same, or if the values are identical
-  if (len != bar_capacity(lk) || foo(lk) == src)
+
+  // Return false if len is bigger than bar_capacity or the values are
+  // identical
+  if (len > bar_capacity(lk) || foo(lk) == src)
     return false;
-  // Copy src to bar_, side effect of updating foo_ if they're different
-  std::memcpy(bar_, src, len);
+
+  // Copy src to bar_, a side effect of updating foo_ if they're different
+  std::memcpy(bar_, src, std::min(len, bar_capacity(lk)));
   foo_set(lk, std::string(src, len));
   return true;
 }
+
 
 template <typename LockType>
 std::string

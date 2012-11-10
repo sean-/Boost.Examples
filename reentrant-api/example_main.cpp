@@ -41,6 +41,7 @@ main(const int /*argc*/, const char** /*argv*/) {
       // Test a const char[7] and a temporary std::string
       e.foo_set("foobar");
       e.foo_set(std::string("ddddd"));
+    }
     { // Test char[7]
       char buf[7] = {"foobar"};
       e.foo_set(buf);

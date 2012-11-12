@@ -47,21 +47,21 @@ main(const int /*argc*/, const char** /*argv*/) {
       e.foo_set(buf);
       assert(e.foo() == "foobar");
     }
+
     { //// And a *char[] & const *char[]
-      auto buf = new char[7];
-      std::memcpy(buf, "foobar", 6);
+      // Use unique_ptr to automatically free buf
+      std::unique_ptr<char[]> buf(new char[7]);
+      std::memcpy(buf.get(), "foobar", 6);
       buf[6] = '\0';
-      e.foo_set(buf);
-      const char* const_ptr = buf;
+      e.foo_set(buf.get());
+      const char* const_ptr = buf.get();
       e.foo_set(const_ptr);
-      delete[] buf;
       assert(e.foo() == "foobar");
     }
 
     cout << "Example's bar capacity: " << e.bar_capacity() << endl;
     const std::size_t len = e.bar_capacity();
 
-    // Use unique_ptr to automatically free buf
     std::unique_ptr<char[]> buf(new char[len +1]);
 
     // Copy bar in to buf

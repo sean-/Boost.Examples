@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "impl_test.hpp"
+#include "foo.hpp"
 
 namespace MyProject {
 class Foo;
@@ -15,18 +15,22 @@ public:
   std::string bar_;
 };
 
+namespace impl_helper {
+
+void bar_1stage(const std::string& src, std::string& dst) {
+  dst = src + src;
+}
+
+void bar_2commit(std::string& src, std::string& dst) {
+  dst.swap(src);
+}
+
+} // namespace impl_helper
+
 void Foo::Impl::mutate_bar() {
   std::string newBar;
-
-  auto prep = [](const decltype(this)& src, decltype(newBar)& dst) {
-    dst = src->bar_ + src->bar_;
-  };
-  auto commit = [](decltype(newBar)& src, decltype(*this)& dst) {
-    dst.bar_.swap(src);
-  };
-
-  prep(this, newBar);
-  commit(newBar, *this);
+  impl_helper::bar_1stage(bar_, newBar);
+  impl_helper::bar_2commit(newBar, bar_);
 };
 
 Foo::Foo(const char* str) : impl_(new Foo::Impl(str)) {}

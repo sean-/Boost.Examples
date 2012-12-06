@@ -6,7 +6,8 @@ PROG_FOO_CPP11 = foo_cpp11
 
 PROGS = ${PROG_FOO_CPP03} ${PROG_FOO_CPP11}
 
-CXXFLAGS += -std=c++11 -stdlib=libc++
+# Use -O4 to point out the resulting object files are identical
+CXXFLAGS += -O4 -std=c++11 -stdlib=libc++
 LDFLAGS += -stdlib=libc++
 
 all: ${PROGS}

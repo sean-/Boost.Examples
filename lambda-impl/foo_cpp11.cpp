@@ -18,14 +18,18 @@ public:
 void Foo::Impl::mutate_bar() {
   std::string newBar;
 
-  auto prep = [](const decltype(this)& src, decltype(newBar)& dst) {
-    dst = src->bar_ + src->bar_;
+  // Mutate newBar to your heart's content, "self" is const protected, go crazy
+  auto prep = [](const decltype(*this)& self, decltype(newBar)& dst) {
+    dst = self.bar_ + self.bar_;
   };
-  auto commit = [](decltype(newBar)& src, decltype(*this)& dst) {
+
+  // Per http://exceptionsafecode.com/, don't throw below this line -
+  // enforced via commit()'s noexcept
+  auto commit = [](decltype(newBar)& src, decltype(*this)& dst) noexcept {
     dst.bar_.swap(src);
   };
 
-  prep(this, newBar);
+  prep(*this, newBar);
   commit(newBar, *this);
 };
 
